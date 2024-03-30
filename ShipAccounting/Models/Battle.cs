@@ -1,24 +1,21 @@
 ﻿using ShipAccounting.Data;
-using ShipAccounting.Models.CreatingModel;
+using ShipAccounting.Models.ModelsSources.ModelInterfaces;
 using System;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ShipAccounting.Models;
 
-public class Battle : ICreatingModel<Battle>
+public class Battle : IFactoryModel<Battle>
 {
     public int Id { get; set; }
     public string Name { get; set; }
     public DateTime? Date { get; set; }
 
-    [JsonIgnore]
-    public int GetId => Id;
-
-    public Task CreateModelAsync(DataDbContext dbContext, Battle battle)
+    public Task<Battle> GetUpdatedModel(DataDbContext dbContext, Battle model)
     {
-        Name = battle.Name;
-        Date = battle.Date;
-        return Task.CompletedTask;
+        model.Name = Name;
+        model.Date = Date;
+
+        return Task.FromResult(model);
     }
 }

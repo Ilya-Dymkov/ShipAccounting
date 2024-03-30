@@ -1,11 +1,10 @@
 ﻿using ShipAccounting.Data;
-using ShipAccounting.Models.CreatingModel;
-using System.Text.Json.Serialization;
+using ShipAccounting.Models.ModelsSources.ModelInterfaces;
 using System.Threading.Tasks;
 
 namespace ShipAccounting.Models;
 
-public class ShipClass : ICreatingModel<ShipClass>
+public class ShipClass : IFactoryModel<ShipClass>
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -15,17 +14,15 @@ public class ShipClass : ICreatingModel<ShipClass>
     public short? Bore { get; set; }
     public int? Displacement { get; set; }
 
-    [JsonIgnore]
-    public int GetId => Id;
-
-    public Task CreateModelAsync(DataDbContext dbContext, ShipClass shipClass)
+    public Task<ShipClass> GetUpdatedModel(DataDbContext dbContext, ShipClass model)
     {
-        Name = shipClass.Name;
-        Type = shipClass.Type;
-        Country = shipClass.Country;
-        NumGuns = shipClass.NumGuns;
-        Bore = shipClass.Bore;
-        Displacement = shipClass.Displacement;
-        return Task.CompletedTask;
+        model.Name = Name;
+        model.Type = Type;
+        model.Country = Country;
+        model.NumGuns = NumGuns;
+        model.Bore = Bore;
+        model.Displacement = Displacement;
+
+        return Task.FromResult(model);
     }
 }
